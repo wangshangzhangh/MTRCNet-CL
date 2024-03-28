@@ -17,6 +17,7 @@ import argparse
 import copy
 import random
 import numbers
+from convlstm import ConvLSTM
 
 parser = argparse.ArgumentParser(description='cnn_lstm training')
 parser.add_argument('-g', '--gpu', default=[0,1], nargs='+', type=int, help='index of gpu to use, default 2')

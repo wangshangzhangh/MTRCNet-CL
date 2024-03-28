@@ -18,9 +18,9 @@ import argparse
 from torchvision.transforms import Lambda
 
 parser = argparse.ArgumentParser(description='cnn_lstm testing')
-parser.add_argument('-g', '--gpu', default=[1], nargs='+', type=int, help='index of gpu to use, default 1')
+parser.add_argument('-g', '--gpu', default=[0,1], nargs='+', type=int, help='index of gpu to use, default 1')
 parser.add_argument('-s', '--seq', default=4, type=int, help='sequence length, default 4')
-parser.add_argument('-t', '--test', default=800, type=int, help='test batch size, default 800')
+parser.add_argument('-t', '--test', default=200, type=int, help='test batch size, default 800')
 parser.add_argument('-w', '--work', default=2, type=int, help='num of workers to use, default 2')
 parser.add_argument('-n', '--name', type=str, help='name of model')
 parser.add_argument('-c', '--crop', default=1, type=int, help='0 rand, 1 cent, 5 five_crop, 10 ten_crop, default 1')
@@ -30,7 +30,8 @@ gpu_usg = ",".join(list(map(str, args.gpu)))
 os.environ["CUDA_VISIBLE_DEVICES"] = gpu_usg
 sequence_length = args.seq
 test_batch_size = args.test
-model_name = args.name
+# model_name = args.name
+model_name = '/home/hp/project/MTRCNet-CL/cnn_lstm_epoch_25_length_2_opt_1_mulopt_1_flip_0_crop_1_batch_400_train1_0_val1_0.pth'
 workers = args.work
 crop_type = args.crop
 
@@ -337,12 +338,12 @@ def test_model(test_dataset, test_num_each):
     pt_labels_1 = Variable(pt_labels_1, requires_grad=False)
     pt_preds_1 = Variable(pt_preds_1, requires_grad=False)
     loss_1 = criterion_1(pt_preds_1, pt_labels_1)
-    test_loss_1 += loss_1.data[0]
+    test_loss_1 += loss_1.item()
 
     pt_labels_1 = pt_labels_1.data
     pt_preds_1 = pt_preds_1.data
     sig_out = sig_f(pt_preds_1)
-    preds_cor = torch.ByteTensor(sig_out > 0.5)
+    preds_cor = torch.ByteTensor((sig_out > 0.5).byte())
     preds_cor = preds_cor.long()
     pt_labels_1 = pt_labels_1.long()
     test_corrects_1 = torch.sum(preds_cor == pt_labels_1)
@@ -378,7 +379,7 @@ def test_model(test_dataset, test_num_each):
 print()
 
 def main():
-    _, _, _, _, test_dataset, test_num_each = get_data('train_val_test_paths_labels.pkl')
+    _, _, _, _, test_dataset, test_num_each = get_data('/home/hp/ProcessingData/train_val_test_paths_labels.pkl')
 
     test_model(test_dataset, test_num_each)
 

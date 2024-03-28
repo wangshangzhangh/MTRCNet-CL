@@ -2,8 +2,8 @@ import os
 import numpy as np
 import pickle
 
-root_dir = '/data/lhx/cholec'
-img_dir = os.path.join(root_dir, 'data_resize')
+root_dir = '/home/hp/ProcessingData/cholec80'
+img_dir = os.path.join(root_dir, 'frames')
 tool_dir = os.path.join(root_dir, 'tool_annotations')
 phase_dir = os.path.join(root_dir, 'phase_annotations')
 
@@ -71,7 +71,7 @@ for j in range(len(tool_file_names)):
         if tool_count > 1:
             tool_split = tool_line.split()
             info_each = []
-            img_file_each_path = os.path.join(img_dir_paths[j], img_dir_names[j] + '-' + str(tool_count - 1) + '.jpg')
+            img_file_each_path = os.path.join(img_dir_paths[j], img_dir_names[j] + '_' + str(tool_count - 1).zfill(6) + '.png')
             info_each.append(img_file_each_path)
             for l in range(1, len(tool_split)):
                 info_each.append(int(tool_split[l]))
@@ -92,12 +92,12 @@ for j in range(len(tool_file_names)):
 
 # for k in range(10):
 # print(all_info_all[0][k])
-with open('cholec80.pkl', 'wb') as f:
+with open('/home/hp/ProcessingData/cholec80.pkl', 'wb') as f:
     pickle.dump(all_info_all, f)
 
 import pickle
 
-with open('cholec80.pkl', 'rb') as f:
+with open('/home/hp/ProcessingData/cholec80.pkl', 'rb') as f:
     all_info = pickle.load(f)
 
 train_file_paths = []
@@ -155,7 +155,7 @@ train_val_test_paths_labels.append(train_num_each)
 train_val_test_paths_labels.append(val_num_each)
 train_val_test_paths_labels.append(test_num_each)
 
-with open('train_val_test_paths_labels.pkl', 'wb') as f:
+with open('/home/hp/ProcessingData/train_val_test_paths_labels.pkl', 'wb') as f:
     pickle.dump(train_val_test_paths_labels, f)
 
 
